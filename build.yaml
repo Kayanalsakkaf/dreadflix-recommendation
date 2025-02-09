@@ -1,0 +1,34 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 18  # Specify the Node.js version
+    commands:
+      - echo "Installing dependencies..."
+      - npm install  # Or yarn install if you use yarn
+
+  pre_build:
+    commands:
+      - echo "Running tests..."
+      - npm test  # Or yarn test if you use yarn, make sure to have a test script in package.json
+
+  build:
+    commands:
+      - echo "Building the application..."
+      # Add any build steps specific to your application here
+      # Example: Transpiling code, bundling with webpack, etc.
+
+  post_build:
+    commands:
+      - echo "Build completed on `date`"
+
+artifacts:
+  files:
+    - "**/*"  # Include all files in the project
+  discard-paths: no  # Keep the directory structure
+
+# Optional: Cache dependencies to speed up subsequent builds
+cache:
+  paths:
+    - 'node_modules/**/*'
