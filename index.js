@@ -5,7 +5,7 @@ const app = express();
 app.use(express.json());
 
 // Insert "LIKES" Relationship (User -> Movie)
-app.post("/like", async (req, res) => {
+app.post("/discovery/like", async (req, res) => {
   const { userId, movieId } = req.body;
   const session = driver.session();
 
@@ -23,7 +23,7 @@ app.post("/like", async (req, res) => {
 });
 
 // Recommend a Movie for a User (Find movies liked by similar users)
-app.get("/recommend/:userId", async (req, res) => {
+app.get("/discovery/recommend/:userId", async (req, res) => {
   const { userId } = req.params;
   const session = driver.session();
 
