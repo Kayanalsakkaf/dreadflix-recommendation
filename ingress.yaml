@@ -14,7 +14,7 @@ metadata:
     #alb.ingress.kubernetes.io/healthcheck-path: /health
 spec:
   rules:
-  - host: "k8s-default-mindcast-55b5df1e6d-534149313.eu-west-2.elb.amazonaws.com"
+  - host: "dreadflialb-1327580687.us-east-1.elb.amazonaws.com"
     http:
       paths:
 
