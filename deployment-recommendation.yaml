@@ -1,34 +1,35 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: node-neo4j-app
-  labels:
-    app: node-neo4j
+  name: neo4j-deployment
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: node-neo4j
+      app: neo4j-svc
   template:
     metadata:
       labels:
-        app: node-neo4j
+        app: neo4j-svc
     spec:
       containers:
-        - name: node-neo4j
-          image: my-node-neo4j-app:latest
+        - name: neo4j-svc
+          image: recommendationengine.azurecr.io/samples/neo4j:latest
           ports:
-            - containerPort: 3010
+            - containerPort: 3010 
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: node-neo4j-service
+  name: neo4j-svc
+  namespace: default
+  labels:
+    app: neo4j-svc
 spec:
   selector:
-    app: node-neo4j
+    app: neo4j-svc
   ports:
     - protocol: TCP
       port: 3010
       targetPort: 3010
-  type: ClusterIP
+  type: LoadBalancer            
