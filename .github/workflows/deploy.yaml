@@ -17,8 +17,9 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          docker build -t recommendationengine.azurecr.io/samples/neo4j:${{ github.sha }} recommendationengine.azurecr.io/samples/neo4j:latest
-          docker push recommendationengine.azurecr.io/samples/neo4j:${{ github.sha }} 
+          docker build -t recommendationengine.azurecr.io/samples/neo4j:${{ github.sha }} .
+          docker tag recommendationengine.azurecr.io/samples/neo4j:${{ github.sha }} recommendationengine.azurecr.io/samples/neo4j:latest
+          docker push recommendationengine.azurecr.io/samples/neo4j:${{ github.sha }}
           docker push recommendationengine.azurecr.io/samples/neo4j:latest
 
   deploy:
