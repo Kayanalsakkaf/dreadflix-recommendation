@@ -1,8 +1,18 @@
 const express = require("express");
 const driver = require("./neo4j");
+const Movie = require("./models/Movie");
+const connectDB = require("./utils/db");
+const cors = require("cors");
 
 const app = express();
 app.use(express.json());
+connectDB();
+app.use(
+  cors({
+    origin: "*",
+    credentials: true,
+  })
+);
 
 // Insert "LIKES" Relationship (User -> Movie)
 app.post("/discovery/like", async (req, res) => {
@@ -35,12 +45,13 @@ app.get("/discovery/recommend/:userId", async (req, res) => {
         `,
       { userId }
     );
+    const movieIds = result.records.map((record) => record._fields[0]);
 
-    if (result.records.length > 0) {
-      res.json({ recommendedMovie: result.records[0].get("recommendedMovie") });
-    } else {
-      res.json({ message: "No recommendations found" });
-    }
+    //Query MongoDB to find movies by the extracted IDs
+    const recommended = await Movie.find({
+      _id: { $in: movieIds }, // Use the _id field automatically created by MongoDB
+    }).sort({ createdAt: -1 });
+    res.json([{ category: "Recommended", content: recommended }]);
   } catch (error) {
     res.status(500).json({ error: error.message });
   } finally {
@@ -49,6 +60,4 @@ app.get("/discovery/recommend/:userId", async (req, res) => {
 });
 
 const PORT = process.env.PORT || 3010;
-app.listen(PORT, () =>
-  console.log(`Server running on http://localhost:${PORT}`)
-);
+app.listen(PORT, () => console.log(`Server running on ${PORT}`));
