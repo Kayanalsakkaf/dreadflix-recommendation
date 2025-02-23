@@ -29,7 +29,7 @@ app.get("/discovery/recommend/:userId", async (req, res) => {
 
   try {
     const result = await session.run(
-      `MATCH (u:User {id: ${userId}})-[:LIKES]->(m:Movie)<-[:LIKES]-(other:User)-[:LIKES]->(rec:Movie)
+      `MATCH (u:User {id: '${userId}'})-[:LIKES]->(m:Movie)<-[:LIKES]-(other:User)-[:LIKES]->(rec:Movie)
         WHERE NOT (u)-[:LIKES]->(rec)
         RETURN DISTINCT rec.id AS recommendedMovie;
         `,
